@@ -1,0 +1,27 @@
+{
+  "name": "currency-exchange",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dtroxler21/Currency-Exchange.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dtroxler21/Currency-Exchange/issues"
+  },
+  "homepage": "https://github.com/dtroxler21/Currency-Exchange#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "currency-convert": "^2.0.0",
+    "https": "^1.0.0",
+    "inquirer": "^6.1.0",
+    "mongoose": "^5.2.8",
+    "request": "^2.88.0"
+  }
+}
