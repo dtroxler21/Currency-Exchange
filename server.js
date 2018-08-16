@@ -1,6 +1,12 @@
 const inquirer = require("inquirer");
 const Conversion = require("./models/Conversion");
 const request = require('request');
+const mongoose = require('mongoose');
+
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/currenyConverter";
+
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
 
 inquirer
   .prompt([
@@ -25,14 +31,23 @@ inquirer
         const amount = inquirerResponse.startAmount;
         const euroVal = body.results[euroConversion].val;
         const poundVal = body.results[poundConversion].val;
-        console.log(
-            "EXCHANGE RATES" +
-            "\n" + euroConversion + ": " + euroVal + 
-            "\n" + poundConversion + ": " + poundVal +
-            "\n-------------" +
-            "\nYOUR EXCHANGES" + 
-            "\n" + amount + " " + inquirerResponse.startCurrency + " = " + amount*euroVal + " Euros" +
-            "\n" + amount + " " + inquirerResponse.startCurrency + " = " + amount*poundVal + " Pounds"
-        );
+        Conversion.create({startAmount: amount, startCurrency: inquirerResponse.startCurrency, euroConvertedAmount: amount*euroVal, poundConvertedAmount: amount*poundVal})
+        // console.log(
+        //     "EXCHANGE RATES" +
+        //     "\n" + euroConversion + ": " + euroVal + 
+        //     "\n" + poundConversion + ": " + poundVal +
+        //     "\n-------------" +
+        //     "\nYOUR EXCHANGES" + 
+        //     "\n" + amount + " " + inquirerResponse.startCurrency + " = " + amount*euroVal + " Euros" +
+        //     "\n" + amount + " " + inquirerResponse.startCurrency + " = " + amount*poundVal + " Pounds"
+        // );
+        .then(() => Conversion.find({}))
+        .then((dbConverted) => {
+          console.log("-------------\n" + dbConverted);
+        //   console.log(dbConverted._id.getTimestamp())
+        })
+        .catch(function(err) {
+          return res.json(err);
+        });
     });
   });

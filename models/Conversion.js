@@ -4,17 +4,17 @@ var Schema = mongoose.Schema;
 
 var ConversionSchema = new Schema({
     startAmount: {
-        type: Number,
+        type: String,
     },
     startCurrency: {
         type: String
     },
-    convertedAmount: {
-	    type: Number
+    euroConvertedAmount: {
+	    type: String
     },
-    convertedCurrency: {
-        type: String,
-    },
+    poundConvertedAmount: {
+        type: String
+    }
 });
 
 var Conversion = mongoose.model("Conversion", ConversionSchema);
