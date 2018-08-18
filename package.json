@@ -21,7 +21,7 @@
     "currency-convert": "^2.0.0",
     "https": "^1.0.0",
     "inquirer": "^6.1.0",
-    "mongoose": "^5.2.8",
+    "mongoose": "^5.2.9",
     "request": "^2.88.0"
   }
 }

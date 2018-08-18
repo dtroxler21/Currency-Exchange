@@ -32,22 +32,46 @@ inquirer
         const euroVal = body.results[euroConversion].val;
         const poundVal = body.results[poundConversion].val;
         Conversion.create({startAmount: amount, startCurrency: inquirerResponse.startCurrency, euroConvertedAmount: amount*euroVal, poundConvertedAmount: amount*poundVal})
-        // console.log(
-        //     "EXCHANGE RATES" +
-        //     "\n" + euroConversion + ": " + euroVal + 
-        //     "\n" + poundConversion + ": " + poundVal +
-        //     "\n-------------" +
-        //     "\nYOUR EXCHANGES" + 
-        //     "\n" + amount + " " + inquirerResponse.startCurrency + " = " + amount*euroVal + " Euros" +
-        //     "\n" + amount + " " + inquirerResponse.startCurrency + " = " + amount*poundVal + " Pounds"
-        // );
-        .then(() => Conversion.find({}))
         .then((dbConverted) => {
-          console.log("-------------\n" + dbConverted);
-        //   console.log(dbConverted._id.getTimestamp())
+            console.log(
+            "\n-----------" +
+            "\nEXCHANGE RATES:" +
+                "\n" + euroConversion + ": " + euroVal + 
+                "\n" + poundConversion + ": " + poundVal +
+            "\n-------------" +
+            "\nYOUR EXCHANGES:" + 
+                "\n" + amount + " " + inquirerResponse.startCurrency + " = " + amount*euroVal + " Euros" +
+                "\n" + amount + " " + inquirerResponse.startCurrency + " = " + amount*poundVal + " Pounds" +
+            "\n-------------"
+            );
         })
-        .catch(function(err) {
-          return res.json(err);
+        .catch((err) => {
+          return err;
+        })
+        .then(() =>{
+            inquirer
+            .prompt([
+                {
+                    type: "list",
+                    message: "Would you like to view your exchange history?",
+                    choices: ["Yes", "No"],
+                    name: "exchangeHistory"
+                }
+            ]).then((inquirerResponse) => {
+                if (inquirerResponse.exchangeHistory == "Yes") {
+                    Conversion.find({})
+                    .then((exchanges) => {
+                        for (var i=0; i < exchanges.length; i++) {
+                            console.log(
+                                "\n------------" +
+                                "\nDate and Time of Exchange: " + exchanges[i]._id.getTimestamp() +
+                                "\n" + exchanges[i].startAmount + " " + exchanges[i].startCurrency + " = " + exchanges[i].euroConvertedAmount + " Euros" + 
+                                "\n" + exchanges[i].startAmount + " " + exchanges[i].startCurrency + " = " + exchanges[i].poundConvertedAmount + " Pounds"
+                            )
+                        };
+                    });
+                }
+            });
         });
     });
   });
